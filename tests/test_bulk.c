@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include "../include/cast/operation.h"
+
+struct Operation createComplexConstantAndPrint(double real, double imag) {
+    double complex complexNumber = real + imag * I;
+    struct Operation constantOperation = Constant(&complexNumber);
+    printOperation(constantOperation);
+    return constantOperation;
+}
+
+int complexNumbersOperation() {
+    char *operationName = "complexNumbersOperation";
+    printf("---------------%s--------------\n", operationName);
+
+    struct Operation constant1 = createComplexConstantAndPrint(2, 2);
+    struct Operation constant2 = createComplexConstantAndPrint(3, 1);
+    struct Operation constant3 = createComplexConstantAndPrint(-5, 0);
+
+    struct Operation addition1 = Addition(&constant1, &constant2);
+    printOperation(addition1);
+
+    struct Operation absOperation1 = Abs(&constant3);
+    printOperation(absOperation1);
+
+    char *variableName = "x";
+    struct Operation variableOperation = Variable(&variableName);
+    printOperation(variableOperation);
+
+    struct Operation addition2 = Addition(&addition1, &absOperation1);
+    struct Operation addition3 = Addition(&addition2, &variableOperation);
+
+    struct Operation absOperation2 = Abs(&variableOperation);
+    printOperation(absOperation2);
+
+    struct Operation finalAddition = Addition(&addition3, &absOperation2);
+    printOperation(finalAddition);
+
+    return 0;
+}
+
+int nestedAddition() {
+    char* testName = "nestedAddition";
+    printf("---------------%s--------------\n", testName);
+    double complex number = 2 + 2 * I;
+    struct Operation constant1 = Constant(&number);
+
+    char *name1 = "x";
+    struct Operation variable1 = Variable(&name1);
+
+    char *name2 = "y";
+    struct Operation variable2 = Variable(&name2);
+
+    struct Operation addition1 = Addition(&variable1, &variable2);
+
+    struct Operation addition2 = Addition(&constant1, &addition1);
+    printOperation(addition2);
+    return  0;
+}
+
+int multiplication() {
+    char* testName = "multiplication";
+    printf("---------------%s--------------\n", testName);
+    double complex number = 2 + 2 * I;
+    struct Operation constant1 = Constant(&number);
+
+    double complex number2 = 2;
+    struct Operation constant2 = Constant(&number2);
+    printOperation(constant1);
+    printOperation(constant2);
+
+    struct Operation multiplication = Multiplication(&constant1, &constant2);
+    printOperation(multiplication);
+
+    return 0;
+}
+
+int division() {
+    char *testName = "division";
+    printf("---------------%s--------------\n", testName);
+    double complex number1 = 4 + 4 * I;
+    struct Operation constant1 = Constant(&number1);
+    double complex number2 = 2;
+    struct Operation constant2 = Constant(&number2);
+    printOperation(constant1);
+    printOperation(constant2);
+    struct Operation division = Division(&constant1, &constant2);
+    printOperation(division);
+    return 0;
+}
+
+int testBulk(void) {
+    complexNumbersOperation();
+    nestedAddition();
+    multiplication();
+    division();
+    return 0;
+}
+
+

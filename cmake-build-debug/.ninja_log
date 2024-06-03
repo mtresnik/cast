@@ -1,0 +1,5 @@
+# ninja log v6
+10	51	7391543217045193	CMakeFiles/cast.dir/main.c.obj	e6e6cf6ea742c9c9
+16	64	7391543217093820	CMakeFiles/cast.dir/tests/test_bulk.c.obj	9ba3fb63ba9ead2d
+79	134	7391594706810717	cast.exe	4fa9e8867a16a581
+6	79	7391594706073220	CMakeFiles/cast.dir/src/operation.c.obj	1d3805da0a12af83

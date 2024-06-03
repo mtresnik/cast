@@ -1,0 +1,3 @@
+C:/Users/mikat/Documents/Projects/Github/cast/cmake-build-debug/CMakeFiles/cast.dir
+C:/Users/mikat/Documents/Projects/Github/cast/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/mikat/Documents/Projects/Github/cast/cmake-build-debug/CMakeFiles/rebuild_cache.dir
