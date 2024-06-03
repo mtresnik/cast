@@ -52,6 +52,7 @@ Mkfile.old
 dkms.conf
 
 # CLion project files
-.idea
-cmake-build-*
-
+.idea/
+cmake-build-*/
+/cmake-build-debug/
+/.idea/
