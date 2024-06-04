@@ -36,7 +36,7 @@ struct Token convert(struct Token other, int type){
 char* toStringToken(struct Token t) {
     char* retString = malloc(32 * sizeof(char));
     char* representation = "NULL";
-    if (t.representation != NULL){
+    if (t.representation != NULL) {
         representation = t.representation;
     }
     sprintf(retString, "[[%d,%d] : %d : %s]", t.startIndex, t.endIndex, t.type, representation);
@@ -46,7 +46,14 @@ char* toStringToken(struct Token t) {
 int printToken(struct Token t) {
     char* tokenString = toStringToken(t);
     printf("%s\n", tokenString);
-    free(tokenString);
+    // free(tokenString);
+    return 0;
+}
+
+int printTokens(struct TokenArray t) {
+    for (int i = 0; i < t.numValues; ++i) {
+        printToken(t.values[i]);
+    }
     return 0;
 }
 

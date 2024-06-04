@@ -10,4 +10,12 @@ add_executable(cast main.c
         tests/test_bulk.c
         include/cast/token.h
         src/token.c
+        include/cast/tokenizer.h
+        src/tokenizer.c
+        include/cast/util.h
+        src/util.c
+        tests/test_tokenize.c
+        tests/test_tokenize.h
+        tests/test_util.c
+        tests/test_util.h
 )

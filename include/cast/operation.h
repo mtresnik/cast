@@ -3,6 +3,7 @@
 
 #ifndef CAST_OPERATION_H
 #define CAST_OPERATION_H
+
 #define NULL_OP (-1)
 #define CONSTANT_OPERATION (0)
 #define VARIABLE_OPERATION (1)

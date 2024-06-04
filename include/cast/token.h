@@ -32,6 +32,8 @@ char* toStringToken(struct Token t);
 
 int printToken(struct Token t);
 
+int printTokens(struct TokenArray t);
+
 int equalsToken(struct Token one, struct Token other);
 
 int containsToken(struct TokenArray oneArray, struct Token other);
