@@ -213,7 +213,7 @@ int isConstant(struct Operation operation) {
     }
 }
 
-char *toString(struct Operation operation) {
+char *toStringOperation(struct Operation operation) {
     if (isConstant(operation)) {
         double complex number = toNumber(operation);
         float real = crealf(number);
@@ -238,48 +238,48 @@ char *toString(struct Operation operation) {
     switch (operation.type) {
         case ABS_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "abs(%s)", innerString);
             free(innerString);
             return retString;
         case ADDITION_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "%s + %s", leftString, rightString);
             free(leftString);
             free(rightString);
             return retString;
         case ARCCOS_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "arccos(%s)", innerString);
             free(innerString);
             return retString;
         case ARCSIN_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "arcsin(%s)", innerString);
             free(innerString);
             return retString;
         case ARCTAN_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "arctan(%s)", innerString);
             free(innerString);
             return retString;
         case COS_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "cos(%s)", innerString);
             free(innerString);
             return retString;
         case DIVISION_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "(%s) / (%s)", leftString, rightString);
             free(leftString);
             free(rightString);
@@ -287,8 +287,8 @@ char *toString(struct Operation operation) {
         case LOG_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "log(%s, %s)", leftString, rightString);
             free(leftString);
             free(rightString);
@@ -296,51 +296,51 @@ char *toString(struct Operation operation) {
         case MULTIPLICATION_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "(%s) * (%s)", leftString, rightString);
             free(leftString);
             free(rightString);
             return retString;
         case NEGATION_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "-%s", innerString);
             free(innerString);
             return retString;
         case PARENTHESES_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "(%s)", innerString);
             free(innerString);
             return retString;
         case POWER_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "(%s) ^ (%s)", leftString, rightString);
             free(leftString);
             free(rightString);
             return retString;
         case SIN_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "sin(%s)", innerString);
             free(innerString);
             return retString;
         case SUBTRACTION_OPERATION:
             left = *operation.values[0];
             right = *operation.values[1];
-            leftString = toString(left);
-            rightString = toString(right);
+            leftString = toStringOperation(left);
+            rightString = toStringOperation(right);
             sprintf(retString, "%s - %s", leftString, rightString);
             free(leftString);
             free(rightString);
             return retString;
         case TAN_OPERATION:
             inner = *operation.values[0];
-            innerString = toString(inner);
+            innerString = toStringOperation(inner);
             sprintf(retString, "tan(%s)", innerString);
             free(innerString);
             return retString;
@@ -351,14 +351,14 @@ char *toString(struct Operation operation) {
 }
 
 int printOperation(struct Operation operation) {
-    char* str = toString(operation);
+    char* str = toStringOperation(operation);
     printf("%s\n", str);
     return 0;
 }
 
 int strEquals(struct Operation one, struct Operation other){
-    char* str1 = toString(one);
-    char* str2 = toString(other);
+    char* str1 = toStringOperation(one);
+    char* str2 = toStringOperation(other);
     int compared = strcmp(str1, str2);
     return compared == 0;
 }
@@ -435,10 +435,10 @@ double complex toNumber(struct Operation operation) {
 }
 
 
-int contains(struct Operation one, int size, struct Operation** array) {
+int containsOperation(struct Operation one, int size, struct Operation** array) {
     for (int i = 0; i < size; ++i) {
         struct Operation other = *(array[i]);
-        if (equals(one, other)) {
+        if (equalsOperations(one, other)) {
             return true;
         }
     }
@@ -446,12 +446,12 @@ int contains(struct Operation one, int size, struct Operation** array) {
 }
 
 
-int containsAll(struct Operation one, struct Operation two) {
+int containsAllOperations(struct Operation one, struct Operation two) {
     if (one.numValues != two.numValues) {
         return false;
     }
     for (int i = 0; i < one.numValues; ++i) {
-        if (contains(one, one.numValues, two.values) == false) {
+        if (containsOperation(one, one.numValues, two.values) == false) {
             return false;
         }
     }
@@ -461,7 +461,7 @@ int containsAll(struct Operation one, struct Operation two) {
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "MemoryLeak"
-int equals(struct Operation one, struct Operation two) {
+int equalsOperations(struct Operation one, struct Operation two) {
     int oneIsConstant = isConstant(one);
     int twoIsConstant = isConstant(two);
     if (oneIsConstant && twoIsConstant) {
@@ -480,7 +480,7 @@ int equals(struct Operation one, struct Operation two) {
     if ((one.type == two.type) && (oneFlattened.numValues != twoFlattened.numValues)) {
         return false;
     }
-    if ((one.type == two.type) && containsAll(one, two)) {
+    if ((one.type == two.type) && containsAllOperations(one, two)) {
         return true;
     }
     return strEquals(one, two);

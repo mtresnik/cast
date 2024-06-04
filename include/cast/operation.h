@@ -66,7 +66,7 @@ struct Operation Tan(struct Operation *one);
 
 int isConstant(struct Operation operation);
 
-char* toString(struct Operation operation);
+char* toStringOperation(struct Operation operation);
 
 int printOperation(struct Operation operation);
 
@@ -74,6 +74,6 @@ double complex toNumber(struct Operation operation);
 
 //struct Operation evaluate(struct Operation base, struct Operation one, struct Operation other);
 //
-int equals(struct Operation one, struct Operation two);
+int equalsOperations(struct Operation one, struct Operation two);
 
 #endif //CAST_OPERATION_H
