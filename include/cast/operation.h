@@ -31,6 +31,11 @@ struct Operation {
     double complex* number_representation;
 };
 
+struct OperationArray {
+    int numValues;
+    struct Operation **values;
+};
+
 struct Operation Constant(double complex* number_representation);
 
 struct Operation Variable(char** representation);

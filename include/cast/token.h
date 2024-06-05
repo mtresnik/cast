@@ -4,7 +4,7 @@
 #define NUMBER_TOKEN (0)
 #define OPERATOR_TOKEN (1)
 #define OPEN_PARENTHESIS_TOKEN (2)
-#define CLOSED_PARENTHESIS_TOKEN (3)
+#define CLOSE_PARENTHESIS_TOKEN (3)
 #define TEXT_TOKEN (4)
 #define FUNCTION_TOKEN (5)
 #define VARIABLE_TOKEN (6)
@@ -21,6 +21,17 @@ struct TokenArray {
     struct Token* values;
 };
 
+struct Token cloneToken(struct Token other);
+
+struct TokenArray cloneTokenArray(struct TokenArray other);
+
+struct TokenArray appendTokenArray(struct TokenArray base, struct Token token);
+
+struct TokenArray appendTokenArrayAndFree(struct TokenArray base, struct Token token);
+
+struct TokenArray concatTokenArrays(struct TokenArray base, struct TokenArray other);
+
+struct TokenArray concatTokenArraysAndFree(struct TokenArray base, struct TokenArray other);
 
 struct Token singleIndex(int index, int type);
 

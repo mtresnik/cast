@@ -18,4 +18,12 @@ add_executable(cast main.c
         tests/test_tokenize.h
         tests/test_util.c
         tests/test_util.h
+        include/cast/functions.h
+        src/functions.c
+        tests/test_functions.c
+        tests/test_functions.h
+        include/cast/variables.h
+        src/variables.c
+        tests/test_variables.c
+        tests/test_variables.h
 )

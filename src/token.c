@@ -4,7 +4,76 @@
 #include <malloc.h>
 #include <string.h>
 #include "../include/cast/token.h"
+#include "../include/cast/util.h"
 
+struct Token cloneToken(struct Token other) {
+    struct Token retToken;
+    retToken.startIndex = other.startIndex;
+    retToken.endIndex = other.endIndex;
+    retToken.type = other.type;
+    retToken.representation = cloneString(other.representation);
+    return retToken;
+}
+
+struct TokenArray cloneTokenArray(struct TokenArray other){
+    struct TokenArray retArray;
+    retArray.numValues = other.numValues;
+    retArray.values = malloc(other.numValues * sizeof(struct Token));
+    for (int i = 0; i < other.numValues; ++i) {
+        retArray.values[i] = cloneToken(other.values[i]);
+    }
+    return retArray;
+}
+
+struct TokenArray appendTokenArray(struct TokenArray base, struct Token token){
+    if (base.values == NULL || base.numValues == 0) {
+        struct TokenArray retArray;
+        retArray.numValues = 1;
+        retArray.values = malloc(retArray.numValues * sizeof(struct Token));
+        retArray.values[0] = token;
+        return retArray;
+    }
+    struct TokenArray retArray;
+    retArray.numValues = base.numValues + 1;
+    retArray.values = realloc(base.values, retArray.numValues * sizeof(struct Token));
+    retArray.values[base.numValues] = token;
+    return retArray;
+}
+
+struct TokenArray appendTokenArrayAndFree(struct TokenArray base, struct Token token) {
+    struct TokenArray ret = appendTokenArray(base, token);
+    if (base.values != NULL) {
+        free(base.values);
+    }
+    return ret;
+}
+
+
+struct TokenArray concatTokenArrays(struct TokenArray base, struct TokenArray other) {
+    if (base.numValues == 0 || base.values == NULL) {
+        return cloneTokenArray(other);
+    }
+    if (other.numValues == 0 || other.values == NULL) {
+        return cloneTokenArray(base);
+    }
+    struct TokenArray retArray;
+    retArray.numValues = base.numValues + other.numValues;
+    retArray.values = malloc(retArray.numValues * sizeof(struct Token));
+    memcpy(retArray.values, base.values, base.numValues * sizeof(struct Token));
+    memcpy(retArray.values + base.numValues, other.values, other.numValues * sizeof(struct Token));
+    return retArray;
+}
+
+struct TokenArray concatTokenArraysAndFree(struct TokenArray base, struct TokenArray other) {
+    struct TokenArray ret = concatTokenArrays(base, other);
+    if (base.values != NULL) {
+        free(base.values);
+    }
+    if (other.values != NULL) {
+        free(other.values);
+    }
+    return ret;
+}
 
 struct Token singleIndex(int index, int type) {
     struct Token retToken;
