@@ -636,7 +636,7 @@ struct IntermediateArray removeIntermediateArrayElement(struct IntermediateArray
     struct IntermediateArray result;
     result.numInner = intermediates.numInner;
     result.arraySize = intermediates.arraySize;
-    result.inner = malloc(result.arraySize * sizeof(struct TokenSet));
+    result.inner = malloc(result.arraySize * sizeof(struct Intermediate));
     int j = 0;
     for (int i = 0; i < intermediates.numInner; ++i) {
         struct Intermediate intermediate = intermediates.inner[i];
