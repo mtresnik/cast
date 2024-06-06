@@ -6,7 +6,7 @@
 int testAll() {
     char *testName = "testAll";
     printf("---------------%s--------------\n", testName);
-    char* inputString = "sin(123.5 + iabei + - 123.5)";
+    char* inputString = "sin(123.0) + abc";
     struct TokenArray tokens = tokenize(inputString);
     printTokens(tokens);
     free(tokens.values);
