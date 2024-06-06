@@ -4,25 +4,6 @@
 #ifndef CAST_OPERATION_H
 #define CAST_OPERATION_H
 
-#define NULL_OP (-1)
-#define CONSTANT_OPERATION (0)
-#define VARIABLE_OPERATION (1)
-#define ABS_OPERATION (2)
-#define ADDITION_OPERATION (3)
-#define ARCCOS_OPERATION (4)
-#define ARCSIN_OPERATION (5)
-#define ARCTAN_OPERATION (6)
-#define COS_OPERATION (7)
-#define DIVISION_OPERATION (8)
-#define LOG_OPERATION (9)
-#define MULTIPLICATION_OPERATION (10)
-#define NEGATION_OPERATION (11)
-#define PARENTHESES_OPERATION (12)
-#define POWER_OPERATION (13)
-#define SIN_OPERATION (14)
-#define SUBTRACTION_OPERATION (15)
-#define TAN_OPERATION (16)
-
 struct Operation {
     int numValues;
     struct Operation **values;
@@ -35,6 +16,11 @@ struct OperationArray {
     int numValues;
     struct Operation **values;
 };
+
+// nullOperation is used as a sentinel value, for stubbed functions.
+struct Operation nullOperation(int numValues, struct Operation **values);
+
+struct Operation NamedConstant(double complex* number, char* name);
 
 struct Operation Constant(double complex* number_representation);
 
@@ -78,8 +64,8 @@ int printOperation(struct Operation operation);
 
 double complex toNumber(struct Operation operation);
 
-//struct Operation evaluate(struct Operation base, struct Operation one, struct Operation other);
-//
+struct Operation evaluate(struct Operation base, struct Operation one, struct Operation other);
+
 int equalsOperations(struct Operation one, struct Operation two);
 
 #endif //CAST_OPERATION_H

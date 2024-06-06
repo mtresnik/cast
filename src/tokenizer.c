@@ -6,7 +6,7 @@
 #include "../include/cast/functions.h"
 #include "../include/cast/variables.h"
 
-int compareByStartIndex(const void *a, const void *b){
+int compareTokensByStartIndex(const void *a, const void *b){
     const struct Token *tokenA = (const struct Token *) a;
     const struct Token *tokenB = (const struct Token *) b;
     if (tokenA->startIndex < tokenB->startIndex) {
@@ -19,7 +19,7 @@ int compareByStartIndex(const void *a, const void *b){
 }
 
 void sortTokenArrayByStartIndex(struct TokenArray array){
-    qsort(array.values, array.numValues, sizeof(struct Token), compareByStartIndex);
+    qsort(array.values, array.numValues, sizeof(struct Token), compareTokensByStartIndex);
 }
 
 int indexProcessedToken(int i, struct TokenArray tokenArray) {
@@ -39,7 +39,7 @@ char *preProcess(char *param) {
 #pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
 struct TokenArray tokenizeNumbers(char *inputString) {
     int length = strlen(inputString);
-    struct Token* retArray = malloc(length * sizeof(struct Token));
+    struct TokenArray retArray = nullTokenArray();
     int count = 0;
     char* accumulate = "";
     for (int i = 0; i < length; ++i) {
@@ -57,9 +57,8 @@ struct TokenArray tokenizeNumbers(char *inputString) {
                         NUMBER_TOKEN,
                         representation
                 };
-                retArray[count] = number;
+                retArray = appendTokenArray(retArray, number);
                 count++;
-                free(accumulate);
                 accumulate = "";
             }
         } else {
@@ -80,27 +79,22 @@ struct TokenArray tokenizeNumbers(char *inputString) {
                 NUMBER_TOKEN,
                 representation
         };
-        retArray[count] = number;
-        count++;
+        retArray = appendTokenArray(retArray, number);
         free(accumulate);
     }
-    struct TokenArray result;
-    result.numValues = count;
-    result.values = retArray;
-    return result;
+    return retArray;
 }
 #pragma clang diagnostic pop
 
 int isOperator(char c) {
-    if (strchr("+-*/^", c) != NULL) {
+    if (strchr("+-*/^,", c) != NULL) {
         return true;
     }
     return false;
 }
 
 struct TokenArray tokenizeOperators(struct TokenArray array, char *inputString) {
-    struct TokenArray retArray = cloneTokenArray(array);
-    free(array.values);
+    struct TokenArray retArray = array;
     for (int i = 0; i < strlen(inputString); ++i) {
         if (indexProcessedToken(i, retArray) == false){
             if (isOperator(inputString[i])) {
@@ -123,35 +117,26 @@ struct TokenArray tokenizeOperators(struct TokenArray array, char *inputString) 
 }
 
 struct TokenArray tokenizeParentheses(struct TokenArray array, char *inputString) {
-    struct TokenArray retArray = cloneTokenArray(array);
-    free(array.values);
+    struct TokenArray retArray = array;
     for (int i = 0; i < strlen(inputString); ++i) {
         if (indexProcessedToken(i, retArray) == false) {
             if (inputString[i] == '(') {
                 int start = i;
                 int end = i;
-                char *representation = malloc(2 * sizeof(char));
-                representation[0] = inputString[i];
-                representation[1] = '\0';
-                struct Token openParenthesis = {
-                        start,
-                        end,
-                        OPEN_PARENTHESIS_TOKEN,
-                        representation
-                };
+                struct Token openParenthesis;
+                openParenthesis.startIndex = start;
+                openParenthesis.endIndex = end;
+                openParenthesis.type = OPEN_PARENTHESIS_TOKEN;
+                openParenthesis.representation = "(";
                 retArray = appendTokenArray(retArray, openParenthesis);
             } else if (inputString[i] == ')') {
                 int start = i;
                 int end = i;
-                char *representation = malloc(2 * sizeof(char));
-                representation[0] = inputString[i];
-                representation[1] = '\0';
-                struct Token closeParenthesis = {
-                        start,
-                        end,
-                        CLOSE_PARENTHESIS_TOKEN,
-                        representation
-                };
+                struct Token closeParenthesis;
+                closeParenthesis.startIndex = start;
+                closeParenthesis.endIndex = end;
+                closeParenthesis.type = CLOSE_PARENTHESIS_TOKEN;
+                closeParenthesis.representation = ")";
                 retArray = appendTokenArray(retArray, closeParenthesis);
             }
         }
@@ -160,9 +145,7 @@ struct TokenArray tokenizeParentheses(struct TokenArray array, char *inputString
 }
 
 struct TokenArray tokenizeText(struct TokenArray array, char *inputString) {
-    struct TokenArray retArray = cloneTokenArray(array);
-    free(array.values);
-    // sortTokenArrayByStartIndex(retArray);
+    struct TokenArray retArray = array;
     char* accumulate = "";
     for (int i = 0; i < strlen(inputString); ++i) {
         char v = inputString[i];
@@ -179,7 +162,6 @@ struct TokenArray tokenizeText(struct TokenArray array, char *inputString) {
                     representation
                 };
                 retArray = appendTokenArray(retArray, text);
-                free(accumulate);
             }
             accumulate = "";
         } else {
@@ -207,9 +189,7 @@ struct TokenArray tokenizeText(struct TokenArray array, char *inputString) {
 }
 
 struct TokenArray tokenizeFunctions(struct TokenArray array) {
-    struct TokenArray retArray;
-    retArray.numValues = 0;
-    retArray.values = NULL;
+    struct TokenArray retArray = nullTokenArray();
     struct StringArray reserved = getFunctionEntryKeys();
     for (int i = 0; i < array.numValues; ++i) {
         struct Token curr = array.values[i];
@@ -251,9 +231,7 @@ struct TokenArray tokenizeFunctions(struct TokenArray array) {
 }
 
 struct TokenArray maxVariablesInString(char* inputString) {
-    struct TokenArray retArray;
-    retArray.numValues = 0;
-    retArray.values = NULL;
+    struct TokenArray retArray = nullTokenArray();
     int maxCount = -1;
     char* maxVar = "";
     struct StringArray reserved = getVariableEntryKeys();
@@ -274,12 +252,12 @@ struct TokenArray maxVariablesInString(char* inputString) {
         // Right case
         if (stringStartsWith(inputString, maxVar)) {
             retArray = appendTokenArray(retArray, nullIndex(VARIABLE_TOKEN, maxVar));
-            retArray = concatTokenArraysAndFree(retArray, maxVariablesInString(remainingStrings.strings[0]));
+            retArray = concatTokenArrays(retArray, maxVariablesInString(remainingStrings.strings[0]));
             return retArray;
         }
         // Left case
         struct TokenArray leftHandSide = maxVariablesInString(remainingStrings.strings[0]);
-        retArray = concatTokenArraysAndFree(retArray, leftHandSide);
+        retArray = concatTokenArrays(retArray, leftHandSide);
         retArray = appendTokenArray(retArray, nullIndex(VARIABLE_TOKEN, maxVar));
         return retArray;
     }
@@ -287,9 +265,9 @@ struct TokenArray maxVariablesInString(char* inputString) {
     if (remainingStrings.numStrings == 2) {
         struct TokenArray leftHandSide = maxVariablesInString(remainingStrings.strings[0]);
         struct TokenArray rightHandSide = maxVariablesInString(remainingStrings.strings[1]);
-        retArray = concatTokenArraysAndFree(retArray, leftHandSide);
+        retArray = concatTokenArrays(retArray, leftHandSide);
         retArray = appendTokenArray(retArray, nullIndex(VARIABLE_TOKEN, maxVar));
-        retArray = concatTokenArraysAndFree(retArray, rightHandSide);
+        retArray = concatTokenArrays(retArray, rightHandSide);
         return retArray;
     }
     retArray = appendTokenArray(retArray, nullIndex(VARIABLE_TOKEN, inputString));
@@ -297,25 +275,20 @@ struct TokenArray maxVariablesInString(char* inputString) {
 }
 
 struct TokenArray tokenizeVariables(struct TokenArray array) {
-    struct TokenArray retArray;
-    retArray.numValues = 0;
-    retArray.values = NULL;
+    struct TokenArray retArray = nullTokenArray();
     for (int i = 0; i < array.numValues; ++i) {
         struct Token curr = array.values[i];
         if (curr.type != TEXT_TOKEN) {
             retArray = appendTokenArray(retArray, curr);
         } else {
-            retArray = concatTokenArraysAndFree(retArray, maxVariablesInString(curr.representation));
+            retArray = concatTokenArrays(retArray, maxVariablesInString(curr.representation));
         }
     }
     return retArray;
 }
 
 struct TokenArray justifyMultiplication(struct TokenArray array) {
-    struct TokenArray retArray;
-    retArray.numValues = 0;
-    retArray.values = NULL;
-
+    struct TokenArray retArray = nullTokenArray();
     for (int i = 0; i < array.numValues; ++i) {
         struct Token curr = array.values[i];
         retArray = appendTokenArray(retArray, curr);
@@ -331,9 +304,7 @@ struct TokenArray justifyMultiplication(struct TokenArray array) {
 }
 
 struct TokenArray collapseSigns(struct TokenArray array) {
-    struct TokenArray retArray;
-    retArray.numValues = 0;
-    retArray.values = NULL;
+    struct TokenArray retArray = nullTokenArray();
     int i = 0;
     while (i < array.numValues) {
         struct Token curr = array.values[i];

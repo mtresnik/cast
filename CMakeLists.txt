@@ -26,4 +26,12 @@ add_executable(cast main.c
         src/variables.c
         tests/test_variables.c
         tests/test_variables.h
+        include/cast/parser.h
+        src/parser.c
+        tests/test_tokens.c
+        tests/test_tokens.h
+        tests/test_parse.c
+        tests/test_parse.h
+        tests/test_stress.c
+        tests/test_stress.h
 )

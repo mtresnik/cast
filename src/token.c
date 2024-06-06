@@ -3,8 +3,55 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
+#include <minmax.h>
+#include <math.h>
 #include "../include/cast/token.h"
 #include "../include/cast/util.h"
+
+size_t sizeOfToken(struct Token token) {
+    return (token.endIndex - token.startIndex + 1) * sizeof(char) + sizeof(struct Token);
+}
+
+size_t sizeOfTokenArray(struct TokenArray array) {
+    size_t ret = 0;
+    for (int i = 0; i < array.numValues; ++i) {
+        ret += sizeOfToken(array.values[i]);
+    }
+    return ret;
+}
+
+
+struct TokenArray nullTokenArray() {
+    struct TokenArray retArray = {
+            0,
+            0,
+            NULL
+    };
+    return retArray;
+}
+
+struct TokenArray singleTokenArray(struct Token token) {
+    struct TokenArray retArray;
+    retArray.numValues = 1;
+    retArray.arraySize = 1;
+    retArray.values = malloc(sizeOfToken(token));
+    if (retArray.values == NULL) {
+        fprintf(stderr, "singleTokenArray Memory allocation failed!\n");
+        exit(1);
+    }
+    retArray.values[0] = token;
+    return retArray;
+}
+
+struct TokenArray doubleTokenArray(struct Token left, struct Token right) {
+    struct TokenArray retArray;
+    retArray.numValues = 2;
+    retArray.arraySize = 2;
+    retArray.values = malloc(2 * sizeof(struct Token));
+    retArray.values[0] = left;
+    retArray.values[1] = right;
+    return retArray;
+}
 
 struct Token cloneToken(struct Token other) {
     struct Token retToken;
@@ -18,7 +65,8 @@ struct Token cloneToken(struct Token other) {
 struct TokenArray cloneTokenArray(struct TokenArray other){
     struct TokenArray retArray;
     retArray.numValues = other.numValues;
-    retArray.values = malloc(other.numValues * sizeof(struct Token));
+    retArray.arraySize = other.arraySize;
+    retArray.values = malloc(other.arraySize * sizeof(struct Token));
     for (int i = 0; i < other.numValues; ++i) {
         retArray.values[i] = cloneToken(other.values[i]);
     }
@@ -29,50 +77,59 @@ struct TokenArray appendTokenArray(struct TokenArray base, struct Token token){
     if (base.values == NULL || base.numValues == 0) {
         struct TokenArray retArray;
         retArray.numValues = 1;
+        retArray.arraySize = 1;
         retArray.values = malloc(retArray.numValues * sizeof(struct Token));
         retArray.values[0] = token;
         return retArray;
     }
+    int expectedIndex = base.numValues;
+    if (expectedIndex < base.arraySize) {
+        base.values[expectedIndex] = token;
+        base.numValues++;
+        return base;
+    }
+
     struct TokenArray retArray;
     retArray.numValues = base.numValues + 1;
-    retArray.values = realloc(base.values, retArray.numValues * sizeof(struct Token));
+    retArray.arraySize = max(retArray.numValues, 1.62 * retArray.numValues);
+    size_t newSize = retArray.arraySize * sizeof(struct Token);
+    retArray.values = realloc(base.values, newSize);
     retArray.values[base.numValues] = token;
     return retArray;
 }
 
-struct TokenArray appendTokenArrayAndFree(struct TokenArray base, struct Token token) {
-    struct TokenArray ret = appendTokenArray(base, token);
-    if (base.values != NULL) {
-        free(base.values);
-    }
-    return ret;
-}
-
-
 struct TokenArray concatTokenArrays(struct TokenArray base, struct TokenArray other) {
     if (base.numValues == 0 || base.values == NULL) {
-        return cloneTokenArray(other);
+        return other;
     }
     if (other.numValues == 0 || other.values == NULL) {
-        return cloneTokenArray(base);
+        return base;
     }
     struct TokenArray retArray;
     retArray.numValues = base.numValues + other.numValues;
-    retArray.values = malloc(retArray.numValues * sizeof(struct Token));
-    memcpy(retArray.values, base.values, base.numValues * sizeof(struct Token));
-    memcpy(retArray.values + base.numValues, other.values, other.numValues * sizeof(struct Token));
+    retArray.arraySize = retArray.numValues;
+    size_t newSize = 0;
+    for (int i = 0; i < base.numValues; ++i) {
+        newSize += sizeOfToken(base.values[i]);
+    }
+    for (int i = 0; i < other.numValues; i++) {
+        newSize += sizeOfToken(other.values[i]);
+    }
+    retArray.values = malloc(newSize);
+    if (retArray.values == NULL) {
+        fprintf(stderr, "concatTokenArrays Memory allocation failed!\n");
+        exit(1);
+    }
+    int outerIndex = 0;
+    for (int i = 0; i < base.numValues; i++) {
+        retArray.values[outerIndex] = base.values[i];
+        outerIndex++;
+    }
+    for (int i = 0; i < other.numValues; i++) {
+        retArray.values[outerIndex] = other.values[i];
+        outerIndex++;
+    }
     return retArray;
-}
-
-struct TokenArray concatTokenArraysAndFree(struct TokenArray base, struct TokenArray other) {
-    struct TokenArray ret = concatTokenArrays(base, other);
-    if (base.values != NULL) {
-        free(base.values);
-    }
-    if (other.values != NULL) {
-        free(other.values);
-    }
-    return ret;
 }
 
 struct Token singleIndex(int index, int type) {
@@ -89,7 +146,7 @@ struct Token nullIndex(int type, char* representation) {
     retToken.startIndex = -1;
     retToken.endIndex = -1;
     retToken.type = type;
-    retToken.representation = representation;
+    retToken.representation = cloneString(representation);
     return retToken;
 }
 
@@ -115,11 +172,12 @@ char* toStringToken(struct Token t) {
 int printToken(struct Token t) {
     char* tokenString = toStringToken(t);
     printf("%s\n", tokenString);
-    // free(tokenString);
+    free(tokenString);
     return 0;
 }
 
 int printTokens(struct TokenArray t) {
+    printf("TokenArray Num Values:%d\n", t.numValues);
     for (int i = 0; i < t.numValues; ++i) {
         printToken(t.values[i]);
     }

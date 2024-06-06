@@ -18,20 +18,27 @@ struct Token {
 
 struct TokenArray {
     int numValues;
+    int arraySize;
     struct Token* values;
 };
 
+size_t sizeOfToken(struct Token token);
+
+size_t sizeOfTokenArray(struct TokenArray array);
+
+struct TokenArray nullTokenArray();
+
+struct TokenArray singleTokenArray(struct Token token);
+
+struct TokenArray doubleTokenArray(struct Token left, struct Token right);
+
 struct Token cloneToken(struct Token other);
 
-struct TokenArray cloneTokenArray(struct TokenArray other);
+struct TokenArray cloneTokenArray(struct TokenArray base);
 
 struct TokenArray appendTokenArray(struct TokenArray base, struct Token token);
 
-struct TokenArray appendTokenArrayAndFree(struct TokenArray base, struct Token token);
-
 struct TokenArray concatTokenArrays(struct TokenArray base, struct TokenArray other);
-
-struct TokenArray concatTokenArraysAndFree(struct TokenArray base, struct TokenArray other);
 
 struct Token singleIndex(int index, int type);
 

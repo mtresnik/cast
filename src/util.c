@@ -20,9 +20,8 @@ int printStringArray(struct StringArray array) {
 
 char* cloneString(char* inputString){
     size_t length = strlen(inputString);
-    char*  retString = malloc(length);
+    char*  retString = malloc(length * sizeof(char));
     strcpy(retString, inputString);
-    retString[length] = '\0';
     return retString;
 }
 
@@ -62,7 +61,7 @@ char* replaceChar(char* inputString, char c, char newChar) {
 char* removeChar(char* inputString, char c){
     size_t inputSize = strlen(inputString);
     size_t newSize = inputSize - countChar(inputString, c);
-    char* retString = malloc(newSize * sizeof(char));
+    char* retString = malloc((newSize + 1) * sizeof(char));
     retString[newSize] = '\0';
     int j = 0;
     for (int i = 0; i < inputSize; ++i) {
@@ -145,7 +144,7 @@ int stringEquals(char* one, char* other) {
 
 char* substring(const char* representation, int startIndex, int endIndex) {
     size_t length = endIndex - startIndex;
-    char *retString = malloc(length * sizeof(char));
+    char *retString = malloc((length + 1) * sizeof(char));
     for (int i = startIndex; i < endIndex; i++) {
         retString[i - startIndex] = representation[i];
     }
