@@ -423,7 +423,7 @@ struct TokenSetArray generateParentheses(struct TokenArray inputList) {
     return retList;
 }
 
-bool indexProcessedTokenSet(int i, struct TokenSetArray tokenList) {
+int indexProcessedTokenSet(int i, struct TokenSetArray tokenList) {
     for (int j = 0; j < tokenList.numValues; ++j) {
         struct TokenSet t = tokenList.values[j];
         if (i >= t.startIndex && i <= t.endIndex) {
@@ -658,7 +658,7 @@ void sortIntermediateArrayByStartIndex(struct IntermediateArray intermediates) {
     qsort(intermediates.inner, intermediates.numInner, sizeof(struct Intermediate), compareIntermediateArrayByStartIndex);
 }
 
-bool indexProcessedOperation(int i, struct IntermediateArray intermediateList) {
+int indexProcessedOperation(int i, struct IntermediateArray intermediateList) {
     for (int j = 0; j < intermediateList.numInner; ++j) {
         struct Intermediate t = intermediateList.inner[j];
         if (i >= t.startIndex && i <= t.endIndex) {
