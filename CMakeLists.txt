@@ -35,3 +35,5 @@ add_executable(cast main.c
         tests/test_stress.c
         tests/test_stress.h
 )
+
+target_link_libraries(cast m)
