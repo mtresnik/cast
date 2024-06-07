@@ -17,13 +17,12 @@ int testFunctionsGenerate() {
     char *testName = "testFunctionsGenerate";
     printf("---------------%s--------------\n", testName);
     char* functionName = "sin";
-    char* xString = "x";
     struct Operation (*value) (struct OperationArray operations) = getFunctionEntryValue(functionName);
     struct OperationArray operationArray;
     operationArray.numValues = 1;
     operationArray.values = malloc(operationArray.numValues * sizeof(struct Operation*));
     operationArray.values[0] = malloc(sizeof(struct Operation));
-    *operationArray.values[0] = Variable(&xString);
+    *operationArray.values[0] = Variable("x");
     struct Operation result = value(operationArray);
     printOperation(result);
     free(operationArray.values);

@@ -310,13 +310,9 @@ struct Operation compile(struct Intermediate intermediate) {
     switch (intermediate.type) {
         case NUMBER_INTERMEDIATE:
             double innerValue = strtod(intermediate.tokens.values[0].representation, NULL);
-            double complex* complexValue = malloc(sizeof(double complex));
-            complexValue[0] = innerValue;
-            return Constant(complexValue);
+            return Constant(innerValue);
         case VARIABLE_INTERMEDIATE:
-            char** varString = malloc(sizeof(char**));
-            *varString = intermediate.tokens.values[0].representation;
-            return Variable(varString);
+            return Variable(intermediate.tokens.values[0].representation);
         case ADDITION_INTERMEDIATE:
             // TODO Free memory
             {
@@ -827,16 +823,10 @@ struct Operation parseOperation(char* inputString) {
     struct Operation operation = compile(intermediateOperation);
     free(intermediateOperation.inner);
     free(tokenArray.values);
-    double complex* e = malloc(sizeof(double complex));
-    e[0] = cexp(1.0 + 0.0*I);
-    char** eString = malloc(sizeof(char*));
-    eString[0] = "e";
-    operation = evaluate(operation, Variable(eString), NamedConstant(e, "e"));
+    double complex e = cexp(1.0 + 0.0*I);
+    operation = evaluate(operation, Variable("e"), NamedConstant(e, "e"));
 
-    double complex* i = malloc(sizeof(double complex));
-    i[0] = 0.0 + 1.0 * I;
-    char** iString = malloc(sizeof(char*));
-    iString[0] = "i";
-    operation = evaluate(operation, Variable(iString), NamedConstant(i, "i"));
+    double complex i = 0.0 + 1.0 * I;
+    operation = evaluate(operation, Variable("i"), NamedConstant(i, "i"));
     return operation;
 }

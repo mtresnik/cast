@@ -54,9 +54,7 @@ int putVariableEntry(struct VariableEntry entry){
 struct VariableEntry newVariableEntry(char* name){
     struct VariableEntry entry;
     entry.key = cloneString(name);
-    char ** nameReference = malloc(sizeof(char**));
-    nameReference[0] = name;
-    entry.variable = Variable(nameReference);
+    entry.variable = Variable(name);
     putVariableEntry(entry);
     return entry;
 }

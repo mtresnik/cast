@@ -17,14 +17,16 @@ struct OperationArray {
     struct Operation **values;
 };
 
+void freeOperation(struct Operation operation);
+
 // nullOperation is used as a sentinel value, for stubbed functions.
 struct Operation nullOperation(int numValues, struct Operation **values);
 
-struct Operation NamedConstant(double complex* number, char* name);
+struct Operation NamedConstant(double complex number, char* name);
 
-struct Operation Constant(double complex* number_representation);
+struct Operation Constant(double complex number_representation);
 
-struct Operation Variable(char** representation);
+struct Operation Variable(char* representation);
 
 struct Operation Abs(struct Operation *one);
 

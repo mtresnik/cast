@@ -100,18 +100,14 @@ struct Operation makeAbs(struct OperationArray operations) {
 }
 
 struct Operation makeLog(struct OperationArray operations) {
-    double complex* number = malloc(sizeof(double complex));
-    *number = 10.0 + 0*I;
     struct Operation* c = malloc(sizeof(struct Operation));
-    *c = Constant(number);
+    *c = Constant(10.0 + 0*I);
     return Log(c, operations.values[0]);
 }
 
 struct Operation makeLn(struct OperationArray operations) {
-    double complex* number = malloc(sizeof(double complex));
-    *number = exp(1) + 0*I;
     struct Operation* c = malloc(sizeof(struct Operation));
-    *c = Constant(number);
+    *c = Constant(exp(1) + 0*I);
     return Log(c, operations.values[0]);
 }
 

@@ -24,6 +24,18 @@
 #define SUBTRACTION_OPERATION (15)
 #define TAN_OPERATION (16)
 
+void freeOperation(struct Operation operation){
+    if (operation.values != NULL) {
+        free(operation.values);
+    }
+    if (operation.representation != NULL) {
+        free(operation.representation);
+    }
+    if (operation.number_representation != NULL) {
+        free(operation.number_representation);
+    }
+}
+
 struct Operation nullOperation(int numValues, struct Operation **values){
     struct Operation operation;
     operation.numValues = numValues;
@@ -34,32 +46,40 @@ struct Operation nullOperation(int numValues, struct Operation **values){
     return operation;
 }
 
-struct Operation NamedConstant(double complex* number, char* name) {
+struct Operation NamedConstant(double complex number, char* name) {
+    double complex* complexValue = malloc(sizeof(double complex));
+    complexValue[0] = number;
+    char** varString = malloc(sizeof(char**));
+    *varString = name;
     struct Operation operation;
     operation.numValues = 0;
     operation.values = NULL;
     operation.type = CONSTANT_OPERATION;
-    operation.representation = name;
-    operation.number_representation = number;
+    operation.representation = varString;
+    operation.number_representation = complexValue;
     return operation;
 }
 
-struct Operation Constant(double complex* number) {
+struct Operation Constant(double complex number) {
+    double complex* complexValue = malloc(sizeof(double complex));
+    complexValue[0] = number;
     struct Operation operation;
     operation.numValues = 0;
     operation.values = NULL;
     operation.type = CONSTANT_OPERATION;
     operation.representation = NULL;
-    operation.number_representation = number;
+    operation.number_representation = complexValue;
     return operation;
 }
 
-struct Operation Variable(char** representation) {
+struct Operation Variable(char* representation) {
+    char** varString = malloc(sizeof(char**));
+    *varString = representation;
     struct Operation operation;
     operation.numValues = 0;
     operation.values = NULL;
     operation.type = VARIABLE_OPERATION;
-    operation.representation = representation;
+    operation.representation = varString;
     operation.number_representation = NULL;
     return operation;
 }
