@@ -15,10 +15,8 @@ int main(void) {
     printOperation(operation);
     
     // Replace variables!
-    char* aString = "a";
-    struct Operation variable = Variable(&aString);
-    double complex number = 2 + 2 * I;
-    struct Operation constant = Constant(&number);
+    struct Operation variable = Variable("a");
+    struct Operation constant = Constant(2 + 2 * I);
     struct Operation evaluated = evaluate(operation, variable, constant);
     
     // Or replace entire functions:
