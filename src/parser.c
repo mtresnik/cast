@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <tgmath.h>
-#include <minmax.h>
 #include <memory.h>
 #include <string.h>
 #include <complex.h>
 #include "../include/cast/parser.h"
 #include "../include/cast/tokenizer.h"
 #include "../include/cast/functions.h"
+#include "../include/cast/util.h"
 
 #define NULL_INTERMEDIATE (-1)
 #define NUMBER_INTERMEDIATE (0)
@@ -144,7 +144,7 @@ struct TokenSetArray appendTokenSetArray(struct TokenSetArray base, struct Token
     }
     struct TokenSetArray retArray;
     retArray.numValues = base.numValues + 1;
-    retArray.arraySize = max(retArray.numValues, retArray.numValues * 1.62);
+    retArray.arraySize = maxInt(retArray.numValues, retArray.numValues * 1.62);
     size_t newSize = retArray.arraySize * sizeof(struct TokenSet);
     retArray.values = realloc(base.values, newSize);
     retArray.values[base.numValues] = tokenSet;
@@ -172,7 +172,7 @@ struct IntermediateArray appendIntermediateArray(struct IntermediateArray base, 
     }
     struct IntermediateArray retArray;
     retArray.numInner = base.numInner + 1;
-    retArray.arraySize = max(retArray.numInner, ceilf(retArray.numInner * 1.62f));
+    retArray.arraySize = maxInt(retArray.numInner, ceilf(retArray.numInner * 1.62f));
     size_t newSize = retArray.arraySize * sizeof(struct Intermediate);
     retArray.inner = realloc(base.inner, newSize);
     if (retArray.inner == NULL) {

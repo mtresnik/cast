@@ -190,3 +190,10 @@ struct StringArray findRemainingStrings(char* test, char* key) {
         return retArray;
     }
 }
+
+int maxInt(int one, int other){
+    if (one > other) {
+        return one;
+    }
+    return other;
+}

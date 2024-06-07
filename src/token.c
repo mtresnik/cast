@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-#include <minmax.h>
 #include <math.h>
 #include "../include/cast/token.h"
 #include "../include/cast/util.h"
@@ -91,7 +90,7 @@ struct TokenArray appendTokenArray(struct TokenArray base, struct Token token){
 
     struct TokenArray retArray;
     retArray.numValues = base.numValues + 1;
-    retArray.arraySize = max(retArray.numValues, 1.62 * retArray.numValues);
+    retArray.arraySize = maxInt(retArray.numValues, ceilf(1.62 * retArray.numValues));
     size_t newSize = retArray.arraySize * sizeof(struct Token);
     retArray.values = realloc(base.values, newSize);
     retArray.values[base.numValues] = token;

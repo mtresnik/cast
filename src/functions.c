@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <strings.h>
-#include <minmax.h>
 #include <math.h>
 #include <malloc.h>
 #include "../include/cast/functions.h"
@@ -21,7 +19,7 @@ struct StringArray getFunctionEntryKeys() {
             count++;
         }
     }
-    int newSize = count * sizeof(char*);
+    size_t newSize = count * sizeof(char*);
     char** currArray = malloc(newSize); // assume size
     count = 0;
     for (int i = 0; i < MAX_SIZE_FUNCTION_MAP; ++i) {

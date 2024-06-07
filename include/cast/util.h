@@ -38,4 +38,6 @@ char* substring(const char* representation, int startIndex, int endIndex);
 
 struct StringArray findRemainingStrings(char* test, char* key);
 
+int maxInt(int one, int other);
+
 #endif //CAST_UTIL_H
