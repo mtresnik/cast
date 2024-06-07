@@ -8,8 +8,8 @@ struct Operation createComplexConstantAndPrint(double real, double imag) {
     return constantOperation;
 }
 
-int complexNumbersOperation() {
-    char *operationName = "complexNumbersOperation";
+int testBulkComplexNumbersOperation() {
+    char *operationName = "testBulkComplexNumbersOperation";
     printf("---------------%s--------------\n", operationName);
 
     struct Operation constant1 = createComplexConstantAndPrint(2, 2);
@@ -38,8 +38,8 @@ int complexNumbersOperation() {
     return 0;
 }
 
-int nestedAddition() {
-    char* testName = "nestedAddition";
+int testBulkNestedAddition() {
+    char* testName = "testBulkNestedAddition";
     printf("---------------%s--------------\n", testName);
     double complex number = 2 + 2 * I;
     struct Operation constant1 = Constant(&number);
@@ -57,8 +57,8 @@ int nestedAddition() {
     return  0;
 }
 
-int multiplication() {
-    char* testName = "multiplication";
+int testBulkMultiplication() {
+    char* testName = "testBulkMultiplication";
     printf("---------------%s--------------\n", testName);
     double complex number = 2 + 2 * I;
     struct Operation constant1 = Constant(&number);
@@ -74,8 +74,8 @@ int multiplication() {
     return 0;
 }
 
-int division() {
-    char *testName = "division";
+int testBulkDivision() {
+    char *testName = "testBulkDivision";
     printf("---------------%s--------------\n", testName);
     double complex number1 = 4 + 4 * I;
     struct Operation constant1 = Constant(&number1);
@@ -89,10 +89,10 @@ int division() {
 }
 
 int testBulk(void) {
-    complexNumbersOperation();
-    nestedAddition();
-    multiplication();
-    division();
+    testBulkComplexNumbersOperation();
+    testBulkNestedAddition();
+    testBulkMultiplication();
+    testBulkDivision();
     return 0;
 }
 

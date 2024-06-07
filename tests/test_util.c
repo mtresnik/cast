@@ -4,8 +4,8 @@
 #include "test_util.h"
 #include "../include/cast/util.h"
 
-int testAppendChar() {
-    char *testName = "testAppendChar";
+int testUtilAppendChar() {
+    char *testName = "testUtilAppendChar";
     printf("---------------%s--------------\n", testName);
     char* testString = "abc";
     char* appended = appendChar(testString, '1');
@@ -13,8 +13,8 @@ int testAppendChar() {
     return 0;
 }
 
-int testRemoveChar1() {
-    char *testName = "testRemoveChar1";
+int testUtilRemoveChar1() {
+    char *testName = "testUtilRemoveChar1";
     printf("---------------%s--------------\n", testName);
     char *testString = "abc";
     char *removed = removeChar(testString, 'b');
@@ -22,8 +22,8 @@ int testRemoveChar1() {
     return 0;
 }
 
-int testRemoveChar2() {
-    char *testName = "testRemoveChar2";
+int testUtilRemoveChar2() {
+    char *testName = "testUtilRemoveChar2";
     printf("---------------%s--------------\n", testName);
     char *testString = "acbc ccc c c c  cccc";
     char *removed = removeChar(testString, 'c');
@@ -32,8 +32,8 @@ int testRemoveChar2() {
 }
 
 
-int testRemoveChar3() {
-    char *testName = "testRemoveChar3";
+int testUtilRemoveChar3() {
+    char *testName = "testUtilRemoveChar3";
     printf("---------------%s--------------\n", testName);
     char *testString = "acbc ccc c c c  cccc";
     char *removed = removeChar(testString, 'd');
@@ -41,8 +41,8 @@ int testRemoveChar3() {
     return 0;
 }
 
-int testRemainingStrings1() {
-    char *testName = "testRemainingStrings1";
+int testUtilRemainingStrings1() {
+    char *testName = "testUtilRemainingStrings1";
     printf("---------------%s--------------\n", testName);
     char* base = "abacd";
     char* replace = "ba";
@@ -51,8 +51,8 @@ int testRemainingStrings1() {
     return 0;
 }
 
-int testRemainingStrings2() {
-    char *testName = "testRemainingStrings2";
+int testUtilRemainingStrings2() {
+    char *testName = "testUtilRemainingStrings2";
     printf("---------------%s--------------\n", testName);
     char* base = "abJcd";
     char* replace = "ab";
@@ -61,8 +61,8 @@ int testRemainingStrings2() {
     return 0;
 }
 
-int testRemainingStrings3() {
-    char *testName = "testRemainingStrings3";
+int testUtilRemainingStrings3() {
+    char *testName = "testUtilRemainingStrings3";
     printf("---------------%s--------------\n", testName);
     char* base = "abacd";
     char* replace = "cd";
@@ -72,12 +72,12 @@ int testRemainingStrings3() {
 }
 
 int testUtil() {
-    testAppendChar();
-    testRemoveChar1();
-    testRemoveChar2();
-    testRemoveChar3();
-    testRemainingStrings1();
-    testRemainingStrings2();
-    testRemainingStrings3();
+    testUtilAppendChar();
+    testUtilRemoveChar1();
+    testUtilRemoveChar2();
+    testUtilRemoveChar3();
+    testUtilRemainingStrings1();
+    testUtilRemainingStrings2();
+    testUtilRemainingStrings3();
     return 0;
 }

@@ -5,16 +5,16 @@
 #include "../include/cast/util.h"
 
 
-int testGetKeys() {
-    char *testName = "testGetKeys";
+int testFunctionsGetKeys() {
+    char *testName = "testFunctionsGetKeys";
     printf("---------------%s--------------\n", testName);
     struct StringArray entries = getFunctionEntryKeys();
     printStringArray(entries);
     return 0;
 }
 
-int testGenerateFunction() {
-    char *testName = "testGenerateFunction";
+int testFunctionsGenerate() {
+    char *testName = "testFunctionsGenerate";
     printf("---------------%s--------------\n", testName);
     char* functionName = "sin";
     char* xString = "x";
@@ -26,11 +26,12 @@ int testGenerateFunction() {
     *operationArray.values[0] = Variable(&xString);
     struct Operation result = value(operationArray);
     printOperation(result);
+    free(operationArray.values);
 }
 
 
 int testFunctions() {
-    testGetKeys();
-    testGenerateFunction();
+    testFunctionsGetKeys();
+    testFunctionsGenerate();
     return 0;
 }

@@ -3,8 +3,8 @@
 #include "../include/cast/util.h"
 #include "../include/cast/variables.h"
 
-int testVariableMap() {
-    char *testName = "testVariableMap";
+int testVariablesMap() {
+    char *testName = "testVariablesMap";
     printf("---------------%s--------------\n", testName);
     struct StringArray entries = getVariableEntryKeys();
     printStringArray(entries);
@@ -12,6 +12,6 @@ int testVariableMap() {
 }
 
 int testVariables() {
-    testVariableMap();
+    testVariablesMap();
     return 0;
 }

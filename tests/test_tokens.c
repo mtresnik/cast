@@ -3,8 +3,8 @@
 #include "test_tokens.h"
 #include "../include/cast/token.h"
 
-int testAppendToken() {
-    char *testName = "testAppendToken";
+int testTokensAppend() {
+    char *testName = "testTokensAppend";
     printf("---------------%s--------------\n", testName);
     struct Token token;
     token = singleIndex(2, NUMBER_TOKEN);
@@ -32,6 +32,6 @@ int testAppendToken() {
 }
 
 int testTokens() {
-    testAppendToken();
+    testTokensAppend();
     return 0;
 }

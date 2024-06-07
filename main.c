@@ -8,13 +8,13 @@
 #include "tests/test_stress.h"
 
 int main(void) {
-//    testBulk();
-//    testUtil();
-//    testFunctions();
-//    testVariables();
-//    testTokens();
-//    testTokenize();
-//    testParse();
+    testBulk();
+    testUtil();
+    testFunctions();
+    testVariables();
+    testTokens();
+    testTokenize();
+    testParse();
     testStress();
     return 0;
 }
