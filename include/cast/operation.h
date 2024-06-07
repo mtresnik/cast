@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <complex.h>
 
 #ifndef CAST_OPERATION_H

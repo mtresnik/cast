@@ -157,7 +157,7 @@ char* substringToEnd(const char* representation, int startIndex) {
 }
 
 struct StringArray findRemainingStrings(char* test, char* key) {
-    if (strlen(test) == 0 || stringContains(test, key) == false || strlen(test) == strlen(key)) {
+    if (strlen(test) == 0 || stringContains(test, key) == 0 || strlen(test) == strlen(key)) {
         return nullStringArray();
     }
     int index = firstIndexOf(test, key);

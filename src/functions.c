@@ -6,11 +6,11 @@
 
 
 struct FunctionEntry* functionEntries[MAX_SIZE_FUNCTION_MAP];
-int initializedFunctionMap = false;
+int initializedFunctionMap = 0;
 int initFunctionMap();
 
 struct StringArray getFunctionEntryKeys() {
-    if (initializedFunctionMap == false) {
+    if (initializedFunctionMap == 0) {
         initFunctionMap();
     }
     int count = 0;
@@ -39,7 +39,7 @@ int getIndexOfFunction(char* key) {
 }
 
 int containsKeyOfFunction(char* key) {
-    if (initializedFunctionMap == false) {
+    if (initializedFunctionMap == 0) {
         initFunctionMap();
     }
     int index = getIndexOfFunction(key);
@@ -124,6 +124,6 @@ int initFunctionMap(){
     putFunctionEntry(newFunctionEntry("log", makeLog));
     putFunctionEntry(newFunctionEntry("ln", makeLn));
     putFunctionEntry(newFunctionEntry("log_", makeLogBase));
-    initializedFunctionMap = true;
+    initializedFunctionMap = 1;
     return 0;
 }

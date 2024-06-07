@@ -171,7 +171,7 @@ struct Operation Tan(struct Operation *one) {
 
 int hasNestedValues(struct Operation root) {
     if (root.values == NULL) {
-        return false;
+        return 0;
     }
     for (int i = 0; i < root.numValues; ++i) {
 #pragma clang diagnostic push
@@ -179,10 +179,10 @@ int hasNestedValues(struct Operation root) {
         struct Operation element = *root.values[i];
 #pragma clang diagnostic pop
         if (element.numValues > 0) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 struct Operation flatten(struct Operation root) {
@@ -246,21 +246,21 @@ int countFlattened(struct Operation root) {
 int isConstant(struct Operation operation) {
     switch (operation.type) {
         case CONSTANT_OPERATION:
-            return true;
+            return 1;
         case VARIABLE_OPERATION:
-            return false;
+            return 0;
         case NULL_OPERATION:
-            return false;
+            return 0;
         case PARENTHESES_OPERATION:
             return isConstant(*operation.values[0]);
         default:
             for (int i = 0; i < operation.numValues; ++i) {
                 int isConstantValue = isConstant(*operation.values[i]);
-                if (isConstantValue == false) {
-                    return false;
+                if (isConstantValue == 0) {
+                    return 0;
                 }
             }
-            return true;
+            return 1;
     }
 }
 
@@ -416,7 +416,7 @@ int strEquals(struct Operation one, struct Operation other){
     char* str1 = toStringOperation(one);
     char* str2 = toStringOperation(other);
     if (strlen(str1) != strlen(str2)) {
-        return false;
+        return 0;
     }
     int compared = strcmp(str1, str2);
     return compared == 0;
@@ -499,23 +499,23 @@ int containsOperation(struct Operation one, int size, struct Operation** array) 
     for (int i = 0; i < size; ++i) {
         struct Operation other = *(array[i]);
         if (equalsOperations(one, other)) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 
 int containsAllOperations(struct Operation one, struct Operation two) {
     if (one.numValues != two.numValues) {
-        return false;
+        return 0;
     }
     for (int i = 0; i < one.numValues; ++i) {
-        if (containsOperation(one, one.numValues, two.values) == false) {
-            return false;
+        if (containsOperation(one, one.numValues, two.values) == 0) {
+            return 0;
         }
     }
-    return true;
+    return 1;
 }
 
 struct Operation evaluate(struct Operation base, struct Operation one, struct Operation other) {
@@ -635,20 +635,20 @@ int equalsOperations(struct Operation one, struct Operation two) {
         return crealf(oneNumber) == crealf(twoNumber) && cimagf(oneNumber) == cimagf(twoNumber);
     }
     if (oneIsConstant != twoIsConstant) {
-        return false;
+        return 0;
     }
     struct Operation oneFlattened = deepFlatten(one);
     struct Operation twoFlattened = deepFlatten(two);
     free(oneFlattened.values);
     free(twoFlattened.values);
     if ((one.type == two.type) && (oneFlattened.numValues != twoFlattened.numValues)) {
-        return false;
+        return 0;
     }
     if (one.type == two.type && one.type == VARIABLE_OPERATION) {
         return strEquals(one, two);
     }
     if ((one.type == two.type) && containsAllOperations(one, two)) {
-        return true;
+        return 1;
     }
     return strEquals(one, two);
 }

@@ -36,7 +36,6 @@ struct TokenArray singleTokenArray(struct Token token) {
     retArray.values = malloc(sizeOfToken(token));
     if (retArray.values == NULL) {
         fprintf(stderr, "singleTokenArray Memory allocation failed!\n");
-        exit(1);
     }
     retArray.values[0] = token;
     return retArray;
@@ -117,7 +116,6 @@ struct TokenArray concatTokenArrays(struct TokenArray base, struct TokenArray ot
     retArray.values = malloc(newSize);
     if (retArray.values == NULL) {
         fprintf(stderr, "concatTokenArrays Memory allocation failed!\n");
-        exit(1);
     }
     int outerIndex = 0;
     for (int i = 0; i < base.numValues; i++) {
@@ -185,19 +183,19 @@ int printTokens(struct TokenArray t) {
 
 int equalsToken(struct Token one, struct Token other) {
     if (one.startIndex != other.startIndex) {
-        return false;
+        return 0;
     }
     if (one.endIndex != other.endIndex) {
-        return false;
+        return 0;
     }
     if (one.representation == NULL && other.representation != NULL) {
-        return false;
+        return 0;
     }
     if (one.representation != NULL && other.representation == NULL) {
-        return false;
+        return 0;
     }
     if (one.representation == NULL && other.representation == NULL) {
-        return true;
+        return 1;
     }
     char *str1 = one.representation;
     char *str2 = other.representation;
@@ -209,21 +207,21 @@ int containsToken(struct TokenArray oneArray, struct Token other){
     for (int i = 0; i < oneArray.numValues; ++i) {
         struct Token token = oneArray.values[i];
         if (equalsToken(token, other)) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 int containsAllTokens(struct TokenArray oneArray, struct TokenArray otherArray) {
     if (oneArray.numValues != otherArray.numValues) {
-        return false;
+        return 0;
     }
     for (int i = 0; i < oneArray.numValues; ++i) {
         struct Token token = oneArray.values[i];
-        if (containsToken(otherArray, token) == false) {
-            return false;
+        if (containsToken(otherArray, token) == 0) {
+            return 0;
         }
     }
-    return true;
+    return 1;
 }

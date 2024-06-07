@@ -4,11 +4,11 @@
 #include "../include/cast/util.h"
 
 struct VariableEntry* variableEntries[MAX_SIZE_VARIABLE_MAP];
-int initializedVariableMap = false;
+int initializedVariableMap = 0;
 int initVariableMap();
 
 struct StringArray getVariableEntryKeys() {
-    if (initializedVariableMap == false) {
+    if (initializedVariableMap == 0) {
         initVariableMap();
     }
     int count = 0;
@@ -17,7 +17,7 @@ struct StringArray getVariableEntryKeys() {
             count++;
         }
     }
-    int newSize = count * sizeof(char*);
+    size_t newSize = count * sizeof(char*);
     char** currArray = malloc(newSize); // assume size
     count = 0;
     for (int i = 0; i < MAX_SIZE_VARIABLE_MAP; ++i) {
@@ -37,7 +37,7 @@ int getIndexOfVariable(char* key) {
 }
 
 int containsKeyOfVariable(char* key) {
-    if (initializedVariableMap == false) {
+    if (initializedVariableMap == 0) {
         initVariableMap();
     }
     int index = getIndexOfVariable(key);

@@ -29,34 +29,34 @@
 
 int equalsTokenSet(struct TokenSet one, struct TokenSet other) {
     if (one.startIndex != other.startIndex || one.endIndex != other.endIndex) {
-        return false;
+        return 0;
     }
     if (one.type != other.type) {
-        return false;
+        return 0;
     }
     if (one.tokens.numValues != other.tokens.numValues) {
-        return false;
+        return 0;
     }
     if (one.representation == NULL && other.representation != NULL || one.representation != NULL && other.representation == NULL) {
-        return false;
+        return 0;
     }
     if (one.representation == NULL && other.representation == NULL) {
-        return true;
+        return 1;
     }
     return strcmp(one.representation, other.representation) == 0;
 }
 
 int equalsIntermediate(struct Intermediate one, struct Intermediate other) {
     if (one.startIndex != other.startIndex || one.endIndex != other.endIndex) {
-        return false;
+        return 0;
     }
     if (one.type != other.type) {
-        return false;
+        return 0;
     }
     if (one.numInner != other.numInner) {
-        return false;
+        return 0;
     }
-    return true;
+    return 1;
 }
 
 void printIntermediate(struct Intermediate intermediate) {
@@ -121,7 +121,6 @@ struct TokenSetArray cloneTokenSetArray(struct TokenSetArray array) {
     result.values = malloc(result.arraySize * sizeof(struct TokenSet));
     if (result.values == NULL) {
         fprintf(stderr, "cloneTokenSetArray: Failed to allocate memory\n");
-        exit(1);
     }
     memcpy(result.values, array.values, array.numValues * sizeof(struct TokenSet));
     return result;
@@ -159,7 +158,6 @@ struct IntermediateArray appendIntermediateArray(struct IntermediateArray base, 
         retArray.inner = malloc(retArray.arraySize * sizeof(struct Intermediate));
         if (retArray.inner == NULL) {
             fprintf(stderr, "appendIntermediateArray Memory allocation failed!\n");
-            exit(1);
         }
         retArray.inner[0] = intermediate;
         return retArray;
@@ -177,7 +175,6 @@ struct IntermediateArray appendIntermediateArray(struct IntermediateArray base, 
     retArray.inner = realloc(base.inner, newSize);
     if (retArray.inner == NULL) {
         fprintf(stderr, "appendIntermediateArray Memory allocation failed! realloc\n");
-        exit(1);
     }
     retArray.inner[base.numInner] = intermediate;
     return retArray;
@@ -430,10 +427,10 @@ bool indexProcessedTokenSet(int i, struct TokenSetArray tokenList) {
     for (int j = 0; j < tokenList.numValues; ++j) {
         struct TokenSet t = tokenList.values[j];
         if (i >= t.startIndex && i <= t.endIndex) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 struct TokenSetArray removeTokenSetArrayAtIndex(struct TokenSetArray array, int index) {
@@ -665,10 +662,10 @@ bool indexProcessedOperation(int i, struct IntermediateArray intermediateList) {
     for (int j = 0; j < intermediateList.numInner; ++j) {
         struct Intermediate t = intermediateList.inner[j];
         if (i >= t.startIndex && i <= t.endIndex) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 struct IntermediateArray generateIdentities(struct IntermediateArray current, struct TokenArray inputList) {

@@ -25,10 +25,10 @@ void sortTokenArrayByStartIndex(struct TokenArray array){
 int indexProcessedToken(int i, struct TokenArray tokenArray) {
     for (int j = 0; j < tokenArray.numValues; j++) {
         if (tokenArray.values[j].startIndex <= i && i <= tokenArray.values[j].endIndex) {
-            return true;
+            return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 char *preProcess(char *param) {
@@ -88,15 +88,15 @@ struct TokenArray tokenizeNumbers(char *inputString) {
 
 int isOperator(char c) {
     if (strchr("+-*/^,", c) != NULL) {
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
 struct TokenArray tokenizeOperators(struct TokenArray array, char *inputString) {
     struct TokenArray retArray = array;
     for (int i = 0; i < strlen(inputString); ++i) {
-        if (indexProcessedToken(i, retArray) == false){
+        if (indexProcessedToken(i, retArray) == 0){
             if (isOperator(inputString[i])) {
                 int start = i;
                 int end = i;
@@ -119,7 +119,7 @@ struct TokenArray tokenizeOperators(struct TokenArray array, char *inputString) 
 struct TokenArray tokenizeParentheses(struct TokenArray array, char *inputString) {
     struct TokenArray retArray = array;
     for (int i = 0; i < strlen(inputString); ++i) {
-        if (indexProcessedToken(i, retArray) == false) {
+        if (indexProcessedToken(i, retArray) == 0) {
             if (inputString[i] == '(') {
                 int start = i;
                 int end = i;
@@ -198,13 +198,13 @@ struct TokenArray tokenizeFunctions(struct TokenArray array) {
         } else {
             if (i < array.numValues - 1 && array.values[i + 1].type == OPEN_PARENTHESIS_TOKEN) {
                 char* innerFunc = "";
-                int foundInner = false;
+                int foundInner = 0;
                 char* representation = curr.representation;
                 for (int j = 0; j < reserved.numStrings; ++j) {
                     char* key = reserved.strings[j];
                     if (strlen(key) <= strlen(representation) && stringEndsWith(representation, key)){
                         innerFunc = key;
-                        foundInner = true;
+                        foundInner = 1;
                         break;
                     }
                 }
@@ -319,7 +319,7 @@ struct TokenArray collapseSigns(struct TokenArray array) {
             (stringEquals(currRepresentation, "+") || stringEquals(currRepresentation, "-")) &&
             (stringEquals(nextRepresentation, "+") || stringEquals(nextRepresentation, "-"))){
             char* representation = "+";
-            if (stringEquals(currRepresentation, nextRepresentation) == false) {
+            if (stringEquals(currRepresentation, nextRepresentation) == 0) {
                 representation = "-";
             }
             retArray = appendTokenArray(retArray, nullIndex(OPERATOR_TOKEN, representation));
