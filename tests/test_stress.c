@@ -21,7 +21,7 @@ int testStress1(){
     int times[numIterations];
     for (int i = 0; i < numIterations; ++i) {
         long long start = timeInMilliseconds();
-        struct Operation operation = parse(inputString);
+        struct Operation operation = parseOperation(inputString);
         long long end = timeInMilliseconds();
         printOperation(operation);
         free(operation.values);

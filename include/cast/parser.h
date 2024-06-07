@@ -41,6 +41,6 @@ int printTokenSets(struct TokenSetArray tokenSets);
 
 struct TokenSetArray appendTokenSetArray(struct TokenSetArray base, struct TokenSet tokenSet);
 
-struct Operation parse(char* inputString);
+struct Operation parseOperation(char* inputString);
 
 #endif //CAST_PARSER_H

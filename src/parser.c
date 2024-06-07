@@ -821,7 +821,7 @@ struct Intermediate generateIntermediate(struct TokenArray array) {
     return nullIntermediate();
 }
 
-struct Operation parse(char* inputString) {
+struct Operation parseOperation(char* inputString) {
     struct TokenArray tokenArray = tokenize(inputString);
     struct Intermediate intermediateOperation = generateIntermediate(tokenArray);
     struct Operation operation = compile(intermediateOperation);
